@@ -6,7 +6,7 @@ import numpy as np
 import datetime
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable CORS for all routes
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -62,7 +62,6 @@ def check_answers():
     for c in contours:
         (x, y, w, h) = cv2.boundingRect(c)
         ar = w / float(h)
-        # Bubble size range for SSC/HSC OMR bubbles (approx 6-8 mm in pixels)
         if 50 <= w <= 90 and 50 <= h <= 90 and 0.8 <= ar <= 1.2:
             question_cnts.append(c)
 
@@ -84,7 +83,6 @@ def check_answers():
 
             total = cv2.countNonZero(cv2.bitwise_and(thresh, thresh, mask=mask))
 
-            # Ignore bubbles with very few pixels filled (noise)
             if total < 500:
                 continue
 
@@ -122,6 +120,8 @@ def check_answers():
 
     return jsonify(response)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+import os
 
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
