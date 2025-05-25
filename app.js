@@ -70,7 +70,7 @@ checkButton.addEventListener('click', async (event) => {
   formData.append('image', file);
 
   try {
-    const response = await fetch('http://127.0.0.1:5000/check-answers', {
+    const response = await fetch('http://192.168.1.2:5000/check-answers', {
       method: 'POST',
       body: formData
     });
